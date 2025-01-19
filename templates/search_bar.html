@@ -1,0 +1,12 @@
+<div class="search-bar">
+    <form method="GET" action="{{ url_for('search') }}">
+        <input type="text" name="term" placeholder="Поиск лекарств..." value="{{ search_term }}">
+        <select name="prescription">
+            <option value="">Все препараты</option>
+            <option value="true" {% if prescription_filter == 'true' %}selected{% endif %}>Только рецептурные</option>
+            <option value="false" {% if prescription_filter == 'false' %}selected{% endif %}>Без рецепта</option>
+        </select>
+        <input type="number" name="max_price" placeholder="Макс. цена" value="{{ max_price }}" min="0">
+        <button type="submit">Найти</button>
+    </form>
+</div>

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="main-content">
+    <h2>Добро пожаловать в аптеку "Здоровье"</h2>
+    <p>Студент: Миллер Алексей Евгеньевич, Группа: ФБИ-24</p>
+    {% if current_user.is_authenticated and current_user.role == 'admin' %}
+        {% include 'admin_panel.html' %}
+        {% include 'search_bar.html' %}
+    {% else %}
+        {% include 'search_bar.html' %}
+    {% endif %}
+    <div class="medication-list">
+        {% for med in medications %}
+            <div class="medication-card {% if med.id in favorite_medications %}favorite{% endif %}"
+                 data-med-id="{{ med.id }}">
+                <div class="medication-header">
+                    <div>
+                        <h3>{{ med.name }}</h3>
+                        <span class="generic-name">{{ med.generic_name }}</span>
+                    </div>
+                    {% if current_user.is_authenticated and current_user.role != 'admin' %}
+                        <form method="POST" action="{{ url_for('toggle_favorite', medication_id=med.id) }}" class="favorite-form">
+                            <button type="submit" class="favorite-btn">
+                                {% if med.id in favorite_medications %}★{% else %}☆{% endif %}
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+                <div class="medication-details">
+                    <p class="price">{{ med.price }} &#8381;</p>
+                    <p class="quantity">
+                        {% if med.quantity == 0 %}
+                            Отсутствует
+                        {% else %}
+                            {{ med.quantity }} шт.
+                        {% endif %}
+                    </p>
+                    {% if med.prescription_only %}
+                        <span class="prescription-label">Только по рецепту</span>
+                    {% endif %}
+                </div>
+                {% if current_user.is_authenticated and current_user.role == 'admin' %}
+                    <div class="admin-buttons">
+                        <form method="POST" action="{{ url_for('edit_medication', id=med.id) }}" class="edit-medication-form">
+                            <input type="text" name="name" value="{{ med.name }}" required>
+                            <input type="text" name="generic_name" value="{{ med.generic_name }}" required>
+                            <label>
+                                <input type="checkbox" name="prescription_only" {% if med.prescription_only %}checked{% endif %}>
+                                Только по рецепту
+                            </label>
+                            <input type="number" name="price" value="{{ med.price }}" step="0.01" required>
+                            <input type="number" name="quantity" value="{{ med.quantity }}" required>
+                            <button type="submit">Сохранить</button>
+                        </form>
+                        <form method="POST" action="{{ url_for('delete_medication', id=med.id) }}" onsubmit="return confirm('Вы уверены, что хотите удалить этот препарат?');">
+                            <button type="submit" class="delete-btn">Удалить</button>
+                        </form>
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    {% if has_more %}
+        <button onclick="loadMore()" class="load-more-btn">Показать следующие</button>
+    {% endif %}
+</div>
+{% endblock %}

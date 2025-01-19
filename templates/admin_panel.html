@@ -1,0 +1,13 @@
+<div class="admin-panel">
+    <h2>Панель администратора</h2>
+    <form method="POST" action="{{ url_for('add_medication') }}" class="add-medication-form">
+        <input type="text" name="name" placeholder="Название" required>
+        <input type="text" name="generic_name" placeholder="Непатентованное название" required>
+        <label>
+            <input type="checkbox" name="prescription_only"> Только по рецепту
+        </label>
+        <input type="number" name="price" placeholder="Цена" step="0.01" required>
+        <input type="number" name="quantity" placeholder="Количество" required>
+        <button type="submit">Добавить</button>
+    </form>
+</div>

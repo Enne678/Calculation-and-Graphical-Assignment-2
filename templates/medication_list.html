@@ -1,0 +1,17 @@
+<div class="medication-list">
+    {% for med in medications %}
+        <div class="medication-card">
+            <div class="medication-header">
+                <h3>{{ med.name }}</h3>
+                <span class="generic-name">{{ med.generic_name }}</span>
+            </div>
+            <div class="medication-details">
+                <p class="price">{{ med.price }} ₽</p>
+                <p class="quantity">{% if med.quantity == 0 %}Отсутствует{% else %}{{ med.quantity }} шт.{% endif %}</p>
+                {% if med.prescription_only %}
+                    <span class="prescription-label">Только по рецепту</span>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>

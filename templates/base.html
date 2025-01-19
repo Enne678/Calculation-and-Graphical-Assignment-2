@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Аптека "Здоровье"{% endblock %}</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body data-is-admin="{{ 'true' if current_user.is_authenticated and current_user.role == 'admin' else 'false' }}"
+      data-favorite-medications="{{ favorite_medications | tojson | safe }}">
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="{{ url_for('index') }}">
+                        <img src="{{ url_for('static', filename='pill-icon.png') }}" alt="Логотип" class="logo-icon">
+                        <h1 class="logo-text">Аптека "Здоровье"</h1>
+                    </a>
+                </div>
+                <div class="auth">
+                    {% if current_user.is_authenticated %}
+                        <span class="user-email">{{ current_user.username }}</span>
+                        {% if current_user.role == 'admin' %}
+                            <span class="user-role">(Фармацевт)</span>
+                        {% endif %}
+                        <a href="{{ url_for('logout') }}" class="logout-btn">Выйти</a>
+                        {% if current_user.role != 'admin' %}
+                            <form action="{{ url_for('delete_account') }}" method="POST" onsubmit="return confirm('Вы уверены, что хотите удалить свой аккаунт?');">
+                                <button type="submit" class="delete-btn">Удалить аккаунт</button>
+                            </form>
+                        {% endif %}
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="login-btn">Войти</a>
+                        <a href="{{ url_for('register') }}" class="register-link">Нет аккаунта? Зарегистрируйтесь</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="main">
+        <div class="container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+</body>
+</html>

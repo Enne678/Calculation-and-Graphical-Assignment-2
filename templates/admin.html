@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="admin-panel">
+    <h2>Панель администратора</h2>
+    <form class="add-medication-form" onsubmit="addMedication(event)">
+        <input type="text" id="med-name" placeholder="Название" required>
+        <input type="text" id="med-generic-name" placeholder="Непатентованное название" required>
+        <label>
+            <input type="checkbox" id="med-prescription"> Только по рецепту
+        </label>
+        <input type="number" id="med-price" placeholder="Цена" step="0.01" required>
+        <input type="number" id="med-quantity" placeholder="Количество" required>
+        <button type="submit">Добавить</button>
+    </form>
+
+    <div class="medication-list">
+        {% for med in medications %}
+            <div class="medication-card">
+                <div class="medication-header">
+                    <h3>{{ med.name }}</h3>
+                    <span class="generic-name">{{ med.generic_name }}</span>
+                </div>
+                <div class="medication-details">
+                    <p class="price">{{ med.price }} ₽</p>
+                    <p class="quantity">{{ med.quantity }} шт.</p>
+                    {% if med.prescription_only %}
+                        <span class="prescription-label">Только по рецепту</span>
+                    {% endif %}
+                </div>
+                <button onclick="deleteMedication({{ med.id }})" class="delete-btn">Удалить</button>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

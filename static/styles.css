@@ -1,0 +1,303 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f9fafb;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.header {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px 0;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo-icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+}
+
+.logo-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1e40af;
+}
+
+.auth {
+    display: flex;
+    align-items: center;
+}
+
+.user-email {
+    margin-right: 10px;
+    color: #4b5563;
+}
+
+.user-role {
+    margin-right: 10px;
+    color: #4b5563;
+    font-style: italic;
+}
+
+.logout-btn, .login-btn {
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.logout-btn:hover, .login-btn:hover {
+    color: #2563eb;
+}
+
+.register-link {
+    margin-left: 10px;
+    color: #3b82f6;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.register-link:hover {
+    text-decoration: underline;
+}
+
+.delete-btn {
+    background-color: #dc2626;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.delete-btn:hover {
+    background-color: #b91c1c;
+}
+
+.main-content {
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.medication-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.medication-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    position: relative;
+}
+
+.medication-card.favorite {
+    border: 2px solid gold;
+}
+
+.medication-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.medication-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #1e293b;
+    margin-bottom: 5px;
+}
+
+.generic-name {
+    font-size: 14px;
+    color: #64748b;
+    margin-top: 5px;
+    display: block;
+}
+
+.medication-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.price {
+    font-size: 16px;
+    font-weight: bold;
+    color: #1e40af;
+}
+
+.quantity {
+    font-size: 14px;
+    color: #4b5563;
+}
+
+.prescription-label {
+    font-size: 12px;
+    color: #dc2626;
+    background-color: #fee2e2;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.load-more-btn {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.load-more-btn:hover {
+    background-color: #2563eb;
+}
+
+.flash {
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.flash.success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
+
+.flash.danger {
+    background-color: #f8d7da;
+    color: #842029;
+}
+
+.edit-medication-form {
+    margin-top: 10px;
+}
+
+.edit-medication-form input {
+    margin: 5px 0;
+    padding: 5px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.edit-medication-form button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.edit-medication-form button:hover {
+    background-color: #2563eb;
+}
+
+.admin-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.favorite-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #ffd700;
+}
+
+.favorite-btn:hover {
+    color: #ffa500;
+}
+
+.login-form, .register-form {
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.login-form h2, .register-form h2 {
+    margin: 0 0 20px;
+    font-size: 24px;
+    text-align: center;
+}
+
+.login-form input, .register-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.login-form button, .register-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.login-form button:hover, .register-form button:hover {
+    background-color: #2563eb;
+}
+
+.search-bar {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.search-bar input, .search-bar select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+.search-bar button {
+    width: 100%;
+    padding: 10px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.search-bar button:hover {
+    background-color: #2563eb;
+}
