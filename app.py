@@ -1,16 +1,21 @@
+import os
+import re
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
-import re
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/alekseimiller/Calculation-and-Graphical-Assignment-2/instance/pharmacy.db'
-app.config['SECRET_KEY'] = 'your_secret_key'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
+
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -18,6 +23,7 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(100), nullable=False)
     role = db.Column(db.String(20), default='user')
     favorites = db.relationship('Favorites', backref='user', lazy=True)
+
 
 class Medicine(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -27,27 +33,42 @@ class Medicine(db.Model):
     price = db.Column(db.Float, nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
 
+
 class Favorites(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     medication_id = db.Column(db.Integer, db.ForeignKey('medicine.id'), nullable=False)
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+
 def validate_username(username):
     return re.match(r'^[a-zA-Z0-9_]+$', username) is not None
 
+
 def validate_password(password):
     return re.match(r'^[a-zA-Z0-9_!@#$%^&*()]+$', password) is not None
+
+
+def get_favorite_medications():
+    if current_user.is_authenticated and current_user.role != 'admin':
+        return [f.medication_id for f in current_user.favorites]
+    return []
+
+
+def is_admin():
+    return current_user.is_authenticated and current_user.role == 'admin'
+
 
 @app.route('/')
 def index():
     page = int(request.args.get('page', 0))
     query = Medicine.query
-    if current_user.is_authenticated and current_user.role != 'admin':
-        favorite_ids = [fav.medication_id for fav in current_user.favorites]
+    if current_user.is_authenticated and not is_admin():
+        favorite_ids = get_favorite_medications()
         query = query.order_by(Medicine.id.in_(favorite_ids).desc(), Medicine.name.asc())
     else:
         query = query.order_by(Medicine.name.asc())
@@ -57,11 +78,7 @@ def index():
     meds = query.offset(page * per_page).limit(per_page).all()
     has_more = (page + 1) * per_page < total
 
-    fav_list = []
-    if current_user.is_authenticated and current_user.role != 'admin':
-        fav_list = [f.medication_id for f in current_user.favorites]
-
-    return render_template('index.html', medications=meds, has_more=has_more, favorite_medications=fav_list)
+    return render_template('index.html', medications=meds, has_more=has_more, favorite_medications=get_favorite_medications())
 
 @app.route('/search')
 def search():
@@ -310,5 +327,6 @@ def toggle_favorite(medication_id):
 
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()
-    app.run(debug=True)
+        if not os.path.exists(os.path.join(app.instance_path, 'pharmacy.db')):
+            db.create_all()
+    app.run(debug=os.getenv('FLASK_DEBUG', 'False').lower() == 'true')
