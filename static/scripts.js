@@ -9,6 +9,7 @@ function loadMore() {
     const prescriptionFilter = urlParams.get('prescription') || ''
     const maxPrice = urlParams.get('max_price') || ''
     const isAdmin = document.body.dataset.isAdmin === 'true'
+    const isAuthenticated = document.body.dataset.isAuthenticated === 'true'
     const favMeds = JSON.parse(document.body.dataset.favoriteMedications || '[]')
 
     fetch(`/load_more?page=${currentPage + 1}&term=${searchTerm}&prescription=${prescriptionFilter}&max_price=${maxPrice}`)
@@ -46,7 +47,7 @@ function loadMore() {
                             <h3>${m.name}</h3>
                             <span class="generic-name">${m.generic_name}</span>
                         </div>
-                        ${!isAdmin ? `
+                        ${!isAdmin && isAuthenticated ? `
                             <form method="POST" action="/toggle_favorite/${m.id}" class="favorite-form">
                                 <button type="submit" class="favorite-btn">
                                     ${favMeds.includes(m.id) ? '★' : '☆'}

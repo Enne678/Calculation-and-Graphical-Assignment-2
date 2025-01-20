@@ -6,7 +6,7 @@ with app.app_context():
 
     admin_user = User(
         username='alex',
-        password=generate_password_hash('123'),
+        password=generate_password_hash('123', method='pbkdf2:sha256'),
         role='admin'
     )
     db.session.add(admin_user)

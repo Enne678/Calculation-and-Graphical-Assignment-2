@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body data-is-admin="{{ 'true' if current_user.is_authenticated and current_user.role == 'admin' else 'false' }}"
+      data-is-authenticated="{{ 'true' if current_user.is_authenticated else 'false' }}"
       data-favorite-medications="{{ favorite_medications | tojson | safe }}">
     <header class="header">
         <div class="container">

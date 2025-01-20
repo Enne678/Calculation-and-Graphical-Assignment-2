@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import re
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pharmacy.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/alekseimiller/Calculation-and-Graphical-Assignment-2/instance/pharmacy.db'
 app.config['SECRET_KEY'] = 'your_secret_key'
 
 db = SQLAlchemy(app)
@@ -180,7 +180,7 @@ def register():
             flash('Пользователь с таким именем уже существует.', 'danger')
             return redirect(url_for('register'))
 
-        hashed_password = generate_password_hash(password)
+        hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
         new_user = User(username=username, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
